@@ -1,0 +1,1511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template
+	type="ProjTempl"
+	version="1.0"
+	supplier="HKUST Intelligent Racing"
+	revision="1.0"
+	author="Lee Chun Hei (Leslie)"
+	copyright="Copyright (c) 2018 Lee Chun Hei."
+	id="rt_project"
+	label="%RT.Ctemplate.label"
+	description="%RT.Ctemplate.description"
+	help="help.html">
+
+	<property-group
+		id="chip"
+		label="%RT.group.target.label"
+		description="%RT.group.target.description"
+		type="PAGES-ONLY"
+		help="help.html">
+		<property
+			id="RTchipFamily2"
+			label="%RT.chipFamily.label"
+			description="%RT.chipFamily.description"
+			type="select"
+			default="RT1052"
+			hidden="false"
+			persist="true">
+			<item
+				value="RT1052"
+				label="RT1052" />
+			<item
+				value="RT1060"
+				label="RT1060" />
+		</property>
+		<property
+			id="RTflashSize"
+			label="%RT.flashSize.label"
+			description="%RT.flashSize.description"
+			type="input"
+			pattern="[0-9]*"
+			default="%RT.flashSize.default"
+			hidden="false"
+			persist="true" />
+		<property
+			id="RTramSize"
+			label="%RT.ramSize.label"
+			description="%RT.ramSize.description"
+			type="input"
+			pattern="[0-9]*"
+			default="%RT.ramSize.default"
+			hidden="false"
+			persist="true" />
+
+		<property
+			id="RTcontent"
+			label="%RT.content.label"
+			description="%RT.content.description"
+			type="select"
+			default="empty"
+			hidden="false"
+			persist="true">
+			<item
+				value="empty"
+				label="Empty (add your own content)" />
+			<item
+				value="blinky"
+				label="Blinky (blink a led)" />
+		</property>
+
+		<!-- ============================================================== -->
+
+		<property
+			id="useSomeWarnings"
+			label="%someWarnings.label"
+			description="%someWarnings.description"
+			type="boolean"
+			default="true"
+			hidden="false"
+			persist="true" />
+
+		<property
+			id="useMostWarnings"
+			label="%mostWarnings.label"
+			description="%mostWarnings.description"
+			type="boolean"
+			default="false"
+			hidden="false"
+			persist="true" />
+
+		<property
+			id="useWerror"
+			label="%useWerror.label"
+			description="%useWerror.description"
+			type="boolean"
+			default="false"
+			hidden="false"
+			persist="true" />
+
+		<property
+			id="useOg"
+			label="%useOg.label"
+			description="%useOg.description"
+			type="boolean"
+			default="true"
+			hidden="false"
+			persist="true" />
+
+		<property
+			id="useNano"
+			label="%useNano.label"
+			description="%useNano.description"
+			type="boolean"
+			default="true"
+			hidden="false"
+			persist="true" />
+
+		<property
+			id="excludeUnused"
+			label="%excludeUnused.label"
+			description="%excludeUnused.description"
+			type="boolean"
+			default="true"
+			hidden="false"
+			persist="true" />
+
+		<property
+			id="useLto"
+			label="%useLto.label"
+			description="%useLto.description"
+			type="boolean"
+			default="false"
+			hidden="false"
+			persist="true" />
+
+	</property-group>
+
+	<property-group
+		id="folders"
+		label="%group.folders.label"
+		description="%group.folders.description"
+		type="PAGES-ONLY"
+		help="help.html">
+		<property
+			id="includeDir"
+			label="%includeDir.label"
+			description="%includeDir.description"
+			type="input"
+			default="%includeDir.default"
+			pattern="[a-zA-Z0-9/]+"
+			mandatory="true"
+			persist="true" />
+		<property
+			id="sourceDir"
+			label="%sourceDir.label"
+			description="%sourceDir.description"
+			type="input"
+			default="%sourceDir.default"
+			pattern="[a-zA-Z0-9/]+"
+			mandatory="true"
+			persist="true" />
+		<property
+			id="rtlibDir"
+			label="%rtlibDir.label"
+			description="%rtlibDir.description"
+			type="input"
+			default="%rtlibDir.default"
+			mandatory="true"
+			persist="true" />
+		<property 
+			id="buildConfig" 
+			label="%buildConfig.label" 
+			description="%buildConfig.description" 
+			type="input" 
+			pattern="[a-zA-Z0-9/]+" 
+			mandatory="true" 
+			persist="true">
+		</property>
+		<property
+			id="fileExtension"
+			label="Source file extension"
+			description="Will be set to cpp for ccnature"
+			mandatory="true"
+			hidden="true"
+			default="cpp"
+			persist="false" />
+
+		<property
+			id="chipFamily"
+			label="Chip family"
+			description="Will be set to family"
+			mandatory="true"
+			hidden="true"
+			default="undefined"
+			persist="false" />
+			
+		<property
+			id="content"
+			label="Project content (empty/blinky)"
+			description="Will be set to content"
+			mandatory="true"
+			hidden="true"
+			default="undefined"
+			persist="false" />
+	</property-group>
+
+	<!-- Note: the redundant 'condition="1==1"' is a workaround to control the 
+		evaluation order. Without it, processes are evaluated after all ifs. -->
+
+	<if condition="1==1">
+		<process type="ilg.gnumcueclipse.templates.core.SetPropertyIfHasNature">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="natureString"
+				value="org.eclipse.cdt.core.ccnature" />
+			<simple
+				name="propertyName"
+				value="fileExtension" />
+			<simple
+				name="propertyValue"
+				value="cpp" />
+		</process>
+
+		<process type="org.eclipse.cdt.core.AddNature">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="natureId"
+				value="org.eclipse.cdt.core.ccnature" />
+		</process>
+
+		<process type="ilg.gnumcueclipse.templates.core.ConditionalSetProperty">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="" />
+			<simple
+				name="propertyName"
+				value="chipFamily" />
+			<simple
+				name="propertyValue"
+				value="$(RTchipFamily2)" />
+		</process>
+
+		<process type="ilg.gnumcueclipse.templates.core.ConditionalSetProperty">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="" />
+			<simple
+				name="propertyName"
+				value="content" />
+			<simple
+				name="propertyValue"
+				value="$(RTcontent)" />
+		</process>
+
+	</if>
+
+	<!-- ================================================================== -->
+
+	<!-- Create include header folders -->
+
+	<if condition="1==1">
+		<!-- include -->
+		<process type="org.eclipse.cdt.core.CreateFolder">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="path"
+				value="$(includeDir)" />
+		</process>
+
+		<!-- add to include paths -->
+		<process
+			type="org.eclipse.cdt.managedbuilder.core.AppendToMBSStringListOptionValues">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.*.include.paths" />
+					<simple-array name="values">
+						<element value="&quot;../$(includeDir)&quot;" />
+					</simple-array>
+					<simple
+						name="path"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<if condition="1==1">
+		<!-- add RT Library -->
+		<process type="com.hkust.intelligent.racing.rt.template.AddLinkedResource">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="path"
+				value="$(rtlibDir)/config" />
+			<simple
+				name="target"
+				value="config" />
+		</process>
+		<process type="com.hkust.intelligent.racing.rt.template.AddLinkedResource">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="path"
+				value="$(rtlibDir)/inc/device_driver" />
+			<simple
+				name="target"
+				value="inc/device_driver" />
+		</process>
+		<process type="com.hkust.intelligent.racing.rt.template.AddLinkedResource">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="path"
+				value="$(rtlibDir)/inc/driver" />
+			<simple
+				name="target"
+				value="inc/driver" />
+		</process>
+		<process type="com.hkust.intelligent.racing.rt.template.AddLinkedResource">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="path"
+				value="$(rtlibDir)/inc/system" />
+			<simple
+				name="target"
+				value="inc/system" />
+		</process>
+
+		<!-- add to include paths -->
+		<process
+			type="org.eclipse.cdt.managedbuilder.core.AppendToMBSStringListOptionValues">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.*.include.paths" />
+					<simple-array name="values">
+						<element value="&quot;../config&quot;" />
+					</simple-array>
+					<simple
+						name="path"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.*.include.paths" />
+					<simple-array name="values">
+						<element value="&quot;$(rtlibDir)/inc&quot;" />
+					</simple-array>
+					<simple
+						name="path"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<!-- ================================================================== -->
+
+	<!-- Create source folders -->
+	<if condition="1==1">
+		<!-- src -->
+		<process type="org.eclipse.cdt.core.CreateSourceFolder">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="path"
+				value="$(sourceDir)" />
+		</process>
+		<process type="com.hkust.intelligent.racing.rt.template.AddLinkedResource">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="path"
+				value="$(rtlibDir)/src/device_driver" />
+			<simple
+				name="target"
+				value="src/device_driver" />
+		</process>
+		<process type="com.hkust.intelligent.racing.rt.template.AddLinkedResource">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="path"
+				value="$(rtlibDir)/src/driver" />
+			<simple
+				name="target"
+				value="src/driver" />
+		</process>
+		<process type="com.hkust.intelligent.racing.rt.template.AddLinkedResource">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="path"
+				value="$(rtlibDir)/src/system" />
+			<simple
+				name="target"
+				value="src/system" />
+		</process>
+	</if>
+
+	<!-- ================================================================== -->
+
+	<if condition="$(content)==blinky">
+		<!-- main.c - blinky -->
+		<process type="ilg.gnumcueclipse.templates.core.ConditionalAddFiles">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="" />
+			<complex-array name="files">
+				<element>
+					<simple
+						name="source"
+						value="../rt_project/src/blinky_main.cpp" />
+					<simple
+						name="target"
+						value="$(sourceDir)/main.$(fileExtension)" />
+					<simple
+						name="replaceable"
+						value="true" />
+				</element>
+			</complex-array>
+		</process>
+
+	</if>
+
+	<if condition="$(content)==empty">
+		<!-- main.c - empty -->
+		<process type="org.eclipse.cdt.core.AddFiles">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<complex-array name="files">
+				<element>
+					<simple
+						name="source"
+						value="../rt_project/src/main.cpp" />
+					<simple
+						name="target"
+						value="$(sourceDir)/main.$(fileExtension)" />
+					<simple
+						name="replaceable"
+						value="true" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<!-- ================================================================== -->
+
+	<!-- Linker files -->
+	<if condition="$(RTchipFamily2)==RT1052">
+		<process type="org.eclipse.cdt.core.AddFiles">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<complex-array name="files">
+				<element>
+					<simple
+						name="source"
+						value="build/MIMXRT1052.ld" />
+					<simple
+						name="target"
+						value="build/MIMXRT1052.ld" />
+					<simple
+						name="replaceable"
+						value="true" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<!-- ================================================================== -->
+
+	<!-- Target options -->
+	<if condition="1==1">
+		<process type="org.eclipse.cdt.managedbuilder.core.SetMBSStringOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.family" />
+					<simple
+						name="value"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.mcpu.cortex-m7" />
+					<simple
+						name="path"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.architecture" />
+					<simple
+						name="value"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.arch.armv7e-m" />
+					<simple
+						name="path"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.instructionset" />
+					<simple
+						name="value"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.instructionset.thumb" />
+					<simple
+						name="path"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.fpu.abi" />
+					<simple
+						name="value"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.fpu.abi.hard" />
+					<simple
+						name="path"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.fpu.unit" />
+					<simple
+						name="value"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.fpu.unit.fpv5d16" />
+					<simple
+						name="path"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+		<process
+			type="org.eclipse.cdt.managedbuilder.core.SetMBSBooleanOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.arm.target.thumbinterwork" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<!-- ================================================================== -->
+
+	<!-- Global options -->
+	<if condition="1==1">
+		<process
+			type="ilg.gnumcueclipse.templates.core.ConditionalSetMBSBooleanOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="$(useSomeWarnings) == true" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.allwarn" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.extrawarn" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+
+		<process
+			type="ilg.gnumcueclipse.templates.core.ConditionalSetMBSBooleanOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="$(useMostWarnings) == true" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.unused" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.uninitialized" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.missingdeclaration" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.conversion" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.pointerarith" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.padded" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.shadow" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.logicalop" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.agreggatereturn" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.floatequal" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<if condition="1==1">
+		<process
+			type="ilg.gnumcueclipse.templates.core.ConditionalSetMBSBooleanOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="$(useWerror) == true" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.toerrors" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<if condition="$(useOg)==true">
+		<process
+			type="ilg.gnumcueclipse.templates.core.ConditionalSetMBSStringOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level" />
+					<simple
+						name="value"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level.debug" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="debug" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<if condition="$(useOg)!=true">
+		<process
+			type="ilg.gnumcueclipse.templates.core.ConditionalSetMBSStringOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level" />
+					<simple
+						name="value"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level.none" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="debug" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<if condition="1==1">
+		<process
+			type="ilg.gnumcueclipse.templates.core.ConditionalSetMBSBooleanOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.nomoveloopinvariants" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="debug" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<if condition="1==1">
+		<process
+			type="ilg.gnumcueclipse.templates.core.ConditionalSetMBSStringOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.debugging.format" />
+					<simple
+						name="value"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.debugging.format.default" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="debug" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<if condition="1==1">
+		<process
+			type="ilg.gnumcueclipse.templates.core.ConditionalSetMBSStringOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level" />
+					<simple
+						name="value"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level.size" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="release" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<!-- ================================================================== -->
+
+	<!-- C options -->
+	<if condition="1==1">
+		<process type="org.eclipse.cdt.managedbuilder.core.SetMBSStringOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.std" />
+					<simple
+						name="value"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.std.gnu11" />
+					<simple
+						name="path"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+
+		<process
+			type="ilg.gnumcueclipse.templates.core.ConditionalSetMBSBooleanOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="$(useMostWarnings) == true" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.warning.missingprototypes" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.warning.strictprototypes" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.warning.badfunctioncast" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<!-- ================================================================== -->
+
+	<!-- C++ options -->
+	<if condition="1==1">
+		<process type="org.eclipse.cdt.managedbuilder.core.SetMBSStringOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.std" />
+					<simple
+						name="value"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.std.gnucpp11" />
+					<simple
+						name="path"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+
+		<process
+			type="org.eclipse.cdt.managedbuilder.core.SetMBSBooleanOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.noexceptions" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.nortti" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.nousecxaatexit" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.nothreadsafestatics" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+
+		<process
+			type="ilg.gnumcueclipse.templates.core.ConditionalSetMBSBooleanOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="$(useMostWarnings) == true" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.warnabi" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.warning.ctordtorprivacy" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.warning.noexcept" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.warning.nonvirtualdtor" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.warning.strictnullsentinel" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.warning.signpromo" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<!-- ================================================================== -->
+
+	<!-- Linker options -->
+	<if condition="1==1">
+		<process
+			type="org.eclipse.cdt.managedbuilder.core.SetMBSStringListOptionValues">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.*.linker.paths" />
+					<simple-array name="values">
+						<element value="&quot;../build&quot;" />
+					</simple-array>
+					<simple
+						name="path"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.*.linker.flags" />
+					<simple-array name="values">
+						<element value="-print-memory-usage" />
+					</simple-array>
+					<simple
+						name="path"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+		<process type="org.eclipse.cdt.managedbuilder.core.SetMBSStringOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.*.linker.other" />
+					<simple
+						name="value"
+						value="--specs=nosys.specs -N" />
+					<simple
+						name="path"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+		<process
+			type="ilg.gnumcueclipse.templates.core.ConditionalSetMBSBooleanOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.*.linker.nostart" />
+					<simple
+						name="value"
+						value="false" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.*.linker.useprintffloat" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+	
+	<if condition="$(RTchipFamily2)==RT1052">
+		<process
+			type="org.eclipse.cdt.managedbuilder.core.SetMBSStringListOptionValues">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.*.linker.scriptfile" />
+					<simple-array name="values">
+							<element value="MIMXRT1052.ld" />
+					</simple-array>
+					<simple
+						name="path"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<if condition="$(useNano)==true">
+		<process
+			type="ilg.gnumcueclipse.templates.core.ConditionalSetMBSBooleanOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.*.linker.usenewlibnano" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<if condition="$(useLto)==true">
+		<process
+			type="ilg.gnumcueclipse.templates.core.ConditionalSetMBSBooleanOptionValue">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.lto" />
+					<simple
+						name="value"
+						value="true" />
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<!-- ================================================================== -->
+
+	<!-- Macro definitions -->
+	<if condition="1==1">
+		<process
+			type="ilg.gnumcueclipse.templates.core.ConditionalAppendToMBSStringListOptionValues">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.*.defs" />
+					<simple-array name="values">
+						<element value="DEBUG" />
+					</simple-array>
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="debug" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.*.defs" />
+					<simple-array name="values">
+						<element value="$(buildConfig)" />
+					</simple-array>
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="debug" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.*.defs" />
+					<simple-array name="values">
+						<element value="$(RTchipFamily2)" />
+					</simple-array>
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="debug" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<if condition="1==1">
+		<process
+			type="ilg.gnumcueclipse.templates.core.ConditionalAppendToMBSStringListOptionValues">
+			<simple
+				name="projectName"
+				value="$(projectName)" />
+			<simple
+				name="condition"
+				value="" />
+			<complex-array name="resourcePaths">
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.*.defs" />
+					<simple-array name="values">
+						<element value="NDEBUG" />
+					</simple-array>
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="release" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.*.defs" />
+					<simple-array name="values">
+						<element value="$(buildConfig)" />
+					</simple-array>
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="release" />
+				</element>
+				<element>
+					<simple
+						name="id"
+						value="ilg.gnuarmeclipse.managedbuild.cross.option.*.defs" />
+					<simple-array name="values">
+						<element value="$(RTchipFamily2)" />
+					</simple-array>
+					<simple
+						name="path"
+						value="" />
+					<simple
+						name="buildType"
+						value="release" />
+				</element>
+			</complex-array>
+		</process>
+	</if>
+
+	<!-- ================================================================== -->
+
+	<!-- Open editor -->
+	<process type="org.eclipse.cdt.ui.OpenFiles">
+		<simple
+			name="projectName"
+			value="$(projectName)" />
+		<complex-array name="files">
+			<element>
+				<simple
+					name="target"
+					value="$(sourceDir)/main.$(fileExtension)" />
+			</element>
+		</complex-array>
+	</process>
+
+</template>
+

@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/HKUST_Intelligent_Racing_Project_Template_1.0.0.201812181349.jar" id="HKUST_Intelligent_Racing_Project_Template" version="1.0.0.201812181349"/>
+   <feature url="features/HKUST_Intelligent_Racing_Project_Template_1.0.0.201902012042.jar" id="HKUST_Intelligent_Racing_Project_Template" version="1.0.0.201902012042">
+      <category name="hkust_racing"/>
+   </feature>
+   <category-def name="hkust_racing" label="HKUST Intelligent Racing">
+      <description>
+         HKUST Intelligent Racing Plugin
+      </description>
+   </category-def>
 </site>

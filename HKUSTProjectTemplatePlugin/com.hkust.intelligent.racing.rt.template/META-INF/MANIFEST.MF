@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %bundle.name
+Bundle-SymbolicName: com.hkust.intelligent.racing.rt.template;singleton:=true
+Bundle-Version: 2.6.4.qualifier
+Require-Bundle: ilg.gnumcueclipse.core,
+ ilg.gnumcueclipse.templates.core,
+ org.eclipse.core.runtime;bundle-version="3.12.0",
+ org.eclipse.ui;bundle-version="3.108.1",
+ org.eclipse.cdt.core,
+ org.eclipse.equinox.registry
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Vendor: %bundle.vendor
+Bundle-Localization: plugin
+Eclipse-BundleShape: dir
+Import-Package: org.eclipse.core.resources
